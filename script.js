@@ -1,5 +1,15 @@
 // Wait for the DOM content to be fully loaded before executing the script
 document.addEventListener("DOMContentLoaded", function () {
+    // Function to retrieve the high score from local storage
+    function getHighScore() {
+        return localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+    }
+
+    // Function to set the high score in local storage
+    function setHighScore(score) {
+        localStorage.setItem("highScore", score);
+    }
+
     // Get the canvas element and its context
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
@@ -12,16 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize variables for the snake, apple, game loop, and game state
     let snake, apple, gameLoop, isPlaying, score, highScore;
-
-    // Function to retrieve the high score from local storage, defaulting to 0 if not present
-    function getHighScore() {
-        return localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
-    }
-
-    // Function to set the high score in local storage
-    function setHighScore(score) {
-        localStorage.setItem("highScore", score);
-    }
 
     // Function to initialize the game state
     function initializeGame() {
