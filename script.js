@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.height = canvasSize;
 
     let snake, apple, gameLoop, isPlaying, score, highScore;
+    highScore = getHighScore()
 
     // Function to get the high score from cookies
     function getHighScore() {
