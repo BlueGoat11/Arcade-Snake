@@ -7,7 +7,18 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.width = canvasSize;
     canvas.height = canvasSize;
 
-    let snake, apple, gameLoop, isPlaying, score;
+    let snake, apple, gameLoop, isPlaying, score, highScore;
+
+    // Function to get the high score from cookies
+    function getHighScore() {
+        const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)highScore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        return cookieValue ? parseInt(cookieValue) : 0;
+    }
+
+    // Function to set the high score in cookies
+    function setHighScore(score) {
+        document.cookie = `highScore=${score}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+    }
 
     function initializeGame() {
         snake = {
@@ -20,12 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         apple = { x: 0, y: 0 };
         score = 0;
+        highScore = getHighScore(); // Get the high score from cookies
         isPlaying = false;
         clearInterval(gameLoop);
         document.getElementById("playButton").style.display = "flex";
         document.getElementById("restartButton").style.display = "none"; // Hide the restart button initially
         document.getElementById("gameOver").style.display = "none";
-        document.getElementById("scoreValue").textContent = score; // Update the score display
+        document.getElementById("scoreValue").textContent = score;
+        document.getElementById("highScoreValue").textContent = highScore; // Display the high score
         draw();
     }
 
@@ -43,6 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("gameOver").style.display = "flex";
         document.getElementById("playButton").style.display = "none"; // Hide the play button when the game ends
         document.getElementById("restartButton").style.display = "flex"; // Display the restart button
+        // Update the high score if the current score is higher
+        if (score > highScore) {
+            highScore = score;
+            document.getElementById("highScoreValue").textContent = highScore; // Update the displayed high score
+            setHighScore(highScore); // Set the high score in cookies
+        }
     }
 
     function spawnApple() {
