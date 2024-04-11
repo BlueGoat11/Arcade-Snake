@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to set the high score in cookies
     function setHighScore(score) {
-        document.cookie = `highScore=${score}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+        document.cookie = `highScore=${score};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
     }
 
     function initializeGame() {
