@@ -1,26 +1,31 @@
+// Wait for the DOM content to be fully loaded before executing the script
 document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element and its context
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
+    // Define the size of each tile and the overall canvas size
     const tileSize = 20;
-    const canvasSize = 600; // Adjusted canvas size
+    const canvasSize = 600;
     canvas.width = canvasSize;
     canvas.height = canvasSize;
 
+    // Initialize variables for the snake, apple, game loop, and game state
     let snake, apple, gameLoop, isPlaying, score, highScore;
 
-    // Function to get the high score from cookies
+    // Function to retrieve the high score from local storage, defaulting to 0 if not present
     function getHighScore() {
-        const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)highScore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        return cookieValue ? parseInt(cookieValue) : 0;
+        return localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
     }
 
-    // Function to set the high score in cookies
+    // Function to set the high score in local storage
     function setHighScore(score) {
-        document.cookie = `highScore=${score};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+        localStorage.setItem("highScore", score);
     }
 
+    // Function to initialize the game state
     function initializeGame() {
+        // Set initial snake position and direction
         snake = {
             x: Math.floor(canvasSize / tileSize / 2),
             y: Math.floor(canvasSize / tileSize / 2),
@@ -29,59 +34,79 @@ document.addEventListener("DOMContentLoaded", function () {
             cells: [{ x: Math.floor(canvasSize / tileSize / 2), y: Math.floor(canvasSize / tileSize / 2) }],
             maxCells: 4
         };
+        // Initialize the apple position and score
         apple = { x: 0, y: 0 };
         score = 0;
-        highScore = getHighScore(); // Get the high score from cookies
+        // Retrieve the high score from local storage
+        highScore = getHighScore();
+        // Set game state to not playing and clear any existing game loop
         isPlaying = false;
         clearInterval(gameLoop);
+        // Show the play button and hide the restart button and game over message
         document.getElementById("playButton").style.display = "flex";
-        document.getElementById("restartButton").style.display = "none"; // Hide the restart button initially
+        document.getElementById("restartButton").style.display = "none";
         document.getElementById("gameOver").style.display = "none";
+        // Update the score and high score display
         document.getElementById("scoreValue").textContent = score;
-        document.getElementById("highScoreValue").textContent = highScore; // Display the high score
+        document.getElementById("highScoreValue").textContent = highScore;
+        // Draw the initial game state
         draw();
     }
 
+    // Function to start the game
     function startGame() {
+        // Initialize the game
         initializeGame();
+        // Set game state to playing
         isPlaying = true;
-        document.getElementById("playButton").style.display = "none"; // Hide the play button
+        // Hide the play button
+        document.getElementById("playButton").style.display = "none";
+        // Spawn the initial apple and start the game loop
         spawnApple();
         gameLoop = setInterval(update, 100);
     }
 
+    // Function to end the game
     function endGame() {
+        // Set game state to not playing and clear the game loop
         isPlaying = false;
         clearInterval(gameLoop);
+        // Display the game over message and show the restart button
         document.getElementById("gameOver").style.display = "flex";
-        document.getElementById("playButton").style.display = "none"; // Hide the play button when the game ends
-        document.getElementById("restartButton").style.display = "flex"; // Display the restart button
+        document.getElementById("playButton").style.display = "none";
+        document.getElementById("restartButton").style.display = "flex";
         // Update the high score if the current score is higher
         if (score > highScore) {
             highScore = score;
-            document.getElementById("highScoreValue").textContent = highScore; // Update the displayed high score
-            setHighScore(highScore); // Set the high score in cookies
+            document.getElementById("highScoreValue").textContent = highScore;
+            setHighScore(highScore);
         }
     }
 
+    // Function to spawn a new apple at a random position on the canvas
     function spawnApple() {
         apple.x = Math.floor(Math.random() * (canvasSize / tileSize));
         apple.y = Math.floor(Math.random() * (canvasSize / tileSize));
     }
 
+    // Function to update the game state on each game tick
     function update() {
+        // Move the snake
         snake.x += snake.dx;
         snake.y += snake.dy;
 
+        // Check if the snake collides with the walls or itself
         if (snake.x < 0 || snake.x >= canvasSize / tileSize || snake.y < 0 || snake.y >= canvasSize / tileSize) {
             endGame();
         }
 
+        // Update the snake's cells
         snake.cells.unshift({ x: snake.x, y: snake.y });
         if (snake.cells.length > snake.maxCells) {
             snake.cells.pop();
         }
 
+        // Check if the snake eats the apple
         if (snake.cells.some(cell => cell.x === apple.x && cell.y === apple.y)) {
             snake.maxCells++;
             spawnApple();
@@ -89,28 +114,37 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("scoreValue").textContent = score; // Update the score display
         }
 
+        // Check if the snake collides with itself
         if (snake.cells.slice(1).some(cell => cell.x === snake.x && cell.y === snake.y)) {
             endGame();
         }
 
+        // Draw the updated game state
         draw();
     }
 
+    // Function to draw the game state on the canvas
     function draw() {
         ctx.clearRect(0, 0, canvasSize, canvasSize);
 
+        // Draw the apple
         ctx.fillStyle = "red";
         ctx.fillRect(apple.x * tileSize, apple.y * tileSize, tileSize, tileSize);
 
+        // Draw the snake
         ctx.fillStyle = "green";
         snake.cells.forEach(cell => {
             ctx.fillRect(cell.x * tileSize, cell.y * tileSize, tileSize, tileSize);
         });
     }
 
+    // Event listener for the play button click
     document.getElementById("playButton").addEventListener("click", startGame);
-    document.getElementById("restartButton").addEventListener("click", startGame); // Restart the game when the restart button is clicked
 
+    // Event listener for the restart button click
+    document.getElementById("restartButton").addEventListener("click", startGame);
+
+    // Event listener for keyboard input to control the snake
     document.addEventListener("keydown", e => {
         if (!isPlaying) return;
         switch (e.key) {
