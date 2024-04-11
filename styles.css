@@ -146,3 +146,13 @@ canvas {
   color: #fff; /* White text color */
   border-radius: 5px; /* Rounded corners */
 }
+
+#highScore {
+  text-align: center; /* Center align the high score */
+  margin-top: 20px; /* Add some top margin */
+}
+
+#highScoreValue {
+  font-size: 24px; /* Increase font size */
+  padding: 10px; /* Add padding */
+}
