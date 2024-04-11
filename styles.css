@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  font-family: 'Press Start 2P', cursive; /* Use arcade-style font */
+  background-color: #000; /* Dark background color */
+  color: #fff; /* White text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  position: relative;
+}
+
+canvas {
+  border: 4px solid #fff; /* White border for the canvas */
+  background-color: #000; /* Black background for the canvas */
+  display: block;
+  margin: 0 auto; /* Center the canvas */
+  width: 400px; /* Set the canvas width */
+  height: 400px; /* Set the canvas height */
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f00; /* Red button color */
+  border: 3px solid #fff; /* White button border */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px; /* Larger font size */
+  cursor: pointer;
+  border-radius: 10px; /* Rounded corners */
+  font-family: 'Press Start 2P', cursive; /* Use arcade-style font */
+}
+
+#playButton, #restartButton {
+  z-index: 1;
+}
+
+#playButton {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #00f; /* Blue button color */
+  border: 3px solid #fff; /* White button border */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px; /* Larger font size */
+  cursor: pointer;
+  border-radius: 10px; /* Rounded corners */
+  font-family: 'Press Start 2P', cursive; /* Use arcade-style font */
+}
+
+#playButton:hover {
+  background-color: #0080ff; /* Darker blue on hover */
+}
+
+#playButton:active {
+  background-color: #0040aa; /* Darker blue when clicked */
+}
+
+#gameOver {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#gameOver .message {
+  font-size: 28px; /* Larger font size */
+  margin-bottom: 20px;
+}
+
+#restartButton {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 80%; /* Positioned lower than play button */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f00; /* Red button color */
+  border: 3px solid #fff; /* White button border */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px; /* Larger font size */
+  cursor: pointer;
+  border-radius: 10px; /* Rounded corners */
+  font-family: 'Press Start 2P', cursive; /* Use arcade-style font */
+}
+
+#restartButton:hover {
+  background-color: #ff8080; /* Lighter red on hover */
+}
+
+#restartButton:active {
+  background-color: #aa0000; /* Darker red when clicked */
+}
+
+/* Add animation keyframes for the banner */
+@keyframes bannerAnimation {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-10px); }
+  50% { transform: translateY(0); color: #2328c1; }
+  75% { transform: translateY(-5px); }
+}
+
+/* Apply animation to the banner */
+#banner {
+  position: absolute;
+  top: 20px; /* Adjust vertical positioning */
+  left: 0;
+  right: 0;
+  margin: 0 auto; /* Center horizontally */
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  animation: bannerAnimation 2s cubic-bezier(0.5, 0, 0.5, 1) infinite; /* Loop the animation infinitely */
+  text-align: center; /* Center the text horizontally */
+}
